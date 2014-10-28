@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+{% block title %}등록{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+<!-- File Upload Form -->
+{% block content %}
+
+    <div class="container-fluid span12">
+		
+        <div class="row-fluid"> <!-- Begin Rate ratinglog input -->
+            <div class="well"> <!-- first column begin -->
+                {% from "_formhelpers.html" import render_field %}
+                <form id="upload" name="upload" class="form-horizontal" method="POST" action="{% if Rate %}{{ url_for('ratinglog.update_Rate', Rate_id=Rate.id) }}{% else %}{{ url_for('ratinglog.upload_Rate') }}{% endif %}" enctype="multipart/form-data" >
+                    <div> <!-- TAG, COMMENT FORM-->
+                        <p>
+                            {{ render_field(form.priority, class="input-block-level", placeholder="우선순위") }}
+                        </p>
+                        <p>
+                            {{ render_field(form.title, class="input-large input-block-level", placeholder="제목", row="5") }}
+                        </p>
+                        <p>
+                            {{ render_field(form.granted, class="input-block-level", placeholder="인가번호") }}
+                        </p>
+                        <p>
+                            {{ render_field(form.category, class="input-block-level", placeholder="범주") }}
+                        </p>
+                        <p>
+                            {{ render_field(form.definition, class="input-large input-block-level", placeholder="정의", row="5") }}
+                        </p>
+                        <p>
+                            {{ render_field(form.comments, class="input-large input-block-level", placeholder="내용", row="5") }}
+                        </p>
+                        <p>
+                            {{ render_field(form.sql, class="input-large input-block-level", placeholder="쿼리", row="5") }}
+                        </p>
+                    </div>
+
+                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                        {% if Rate %}
+                            <div class="fileupload-preview thumbnail">
+                                <a href="{{url_for('ratinglog.download_Rate', Rate_id=Rate.id)}}" target="_blank">
+                                    첨부파일
+                                </a>
+                            </div>
+							<div>
+                                <span class="btn btn-file btn-info">
+                                    <span class="fileupload-new"> <i class="icon-picture"></i> 변경</span>
+                                    <span class="fileupload-exists"> <i class="icon-pencil"></i> 변경</span>
+                                     {{ render_field(form.uploadfile) }}
+                                      <!--  <input id="uploadfile" name="uploadfile" type="file" /> -->
+                                </span>
+                            </div>
+                        {% else %}
+                            <div class="fileupload-preview thumbnail" > </div>
+                            <div>
+                                <span class="btn btn-file btn-info">
+                                    <span class="fileupload-new"> <i class="icon-picture"></i> 찾기</span>
+                                    <span class="fileupload-exists"> <i class="icon-pencil"></i> 변경</span>
+                                     {{ render_field(form.uploadfile) }}
+                                      <!--  <input id="uploadfile" name="uploadfile" type="file" /> -->
+                                </span>
+                                <a href="#" class="btn fileupload-exists" data-dismiss="fileupload"> <i class="icon-remove"></i> 지우기</a>
+                            </div>
+                        {% endif %}
+                    </div>
+
+				</form>        
+            </div> <!-- end of first column -->
+          
+        </div> <!-- end of first row -->
+
+       
+        <div class="row-fluid">
+            <div class="span6" style="margin-top: -10px;">
+                <div>
+                   <button class="btn btn-block btn-primary span3" onclick="javacscript:$('#upload').submit();"><i class="icon-save"></i> 저장하기</button>
+				</div>
+				{% if Rate %}
+				<br>
+				<div>
+				   &nbsp;혹은&nbsp; 
+				  
+				<button class="btn btn-warning btn-mini" onclick="javascript:removeitem('{{ url_for('ratinglog.remove', Rate_id=Rate.id)}}');"><i class="icon-remove"></i></button>
+				   
+				<button class="btn btn-primary btn-mini" onclick="javascript:twit('{{ url_for('ratinglog.send', Rate_id=Rate.id)}}');" ><i class="icon-twitter"></i></button>
+				</div>
+				{% endif %}
+            </div>
+        </div>
+		
+
+<script type="text/javascript">
+    function removeitem(url){
+    
+        bootbox.confirm("삭제 하시겠습니까?", function(result) {
+            if(result == true){
+                window.location.href= url;
+            }
+        }); 
+    }
+
+    function twit(url){
+    
+        bootbox.confirm("트위터로 전송 하시겠습니까?", function(result) {
+            if(result == true){
+                window.location.href= url;
+            }
+        }); 
+    }
+
+
+</script>
+
+		
+		
+        </div>
+	</div> <!-- End of Container -->
+{% endblock %}

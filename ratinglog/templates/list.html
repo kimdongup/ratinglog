@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block title %}목록{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+jQuery(function($) { 
+	$('tbody tr[data-href]').addClass('Clickable').click(function(){
+		window.location.href = $(this).attr('data-href');
+	});
+});
+
+{% if session.__contains__('TWITTER_RESULT') %}
+
+    var twit_result = '{{ session.pop('TWITTER_RESULT', None) }}';
+        
+    if (twit_result == 'ok') {
+        bootbox.alert('트윗전송을 성공하였습니다.');          
+    }
+    else {
+        bootbox.alert('트윗전송을 실패하였습니다. ('+twit_result+')');         
+    }
+{% endif %}
+
+</script>
+
+  <div class="row-fluid span12">
+	<div class="span12 valign-middle">
+            <table class="table table-hover text-center" align="center">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>우선순위</th>
+				  <th>제목</th>
+                  <th>인가정보</th>
+				  <th>범주</th>
+                  <th>올린날</th>
+                </tr>
+              </thead>
+              <tbody>
+              
+		      {% for Rate in rates %}
+                <tr data-href="{{ url_for('ratinglog.update_Rate_form', Rate_id=Rate.id) }}">
+                  <td class="valign-middle">{{ loop.index }}</td>
+                  <td class="valign-middle"><span class="label label-info">{{ Rate.priority }}</span></td>
+                  <td class="valign-middle">{{ Rate.title }}</td>
+                  <td class="valign-middle">{{ Rate.granted }}</td>
+                  <td class="valign-middle">{{ Rate.category }}</td>
+                  <td class="valign-middle">{{ Rate.upload_date.strftime('%Y-%m-%d %H:%M') }}</td>
+
+                </tr>
+			  {% endfor %}
+
+              </tbody>
+            </table>
+        </div>
+	</div>
+	
+
+        {% if pagination %}
+            <div class="row-fluid" align="center">
+                <div class="span12">
+                <p>
+                    {% from "_pagehelpers.html" import render_pagination %}
+                    {{ render_pagination(pagination) }}
+                </p>
+                </div>
+            </div>
+        {% else %}
+        <!-- do nothing! -->
+        {% endif %}
+
+{% endblock %}
+
+
+
