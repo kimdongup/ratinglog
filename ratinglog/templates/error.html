@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block title %}{{ code }}{% endblock %}{% block content %}<section class="panel error-page"><span class="eyebrow">REQUEST {{ code }}</span><h1>{{ message }}</h1><p>입력값과 접근 권한을 확인한 뒤 다시 시도하세요.</p><a class="button" href="{{ url_for('web.dashboard') if current_user.is_authenticated else url_for('auth.login') }}">처음으로 돌아가기</a></section>{% endblock %}

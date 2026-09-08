@@ -1,0 +1,18 @@
+[project]
+name = "ratinglog"
+version = "2.0.0"
+description = "Governed mortality and morbidity rate registry"
+requires-python = ">=3.13"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --cov=ratinglog --cov-report=term-missing"
+
+[tool.ruff]
+extend-exclude = ["archive.md"]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]

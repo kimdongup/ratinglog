@@ -1,19 +1,6 @@
-'''
-Created on 2014. 10. 15.
-
-@author: kimdongup
-'''
-
-import sys
-
 from ratinglog import create_app
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+application = create_app()
 
-application = create_app()    
-
-if __name__ == '__main__':
-    print "starting ......"
-
-    application.run(host='0.0.0.0', port=5000, debug=True)
+if __name__ == "__main__":
+    application.run(host="127.0.0.1", port=5000, debug=False)

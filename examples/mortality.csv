@@ -1,0 +1,7 @@
+age,sex,smoking,duration,rate
+30,F,non_smoker,0,0.0005
+31,F,non_smoker,0,0.0006
+32,F,non_smoker,0,0.0007
+30,M,non_smoker,0,0.0007
+31,M,non_smoker,0,0.0008
+32,M,non_smoker,0,0.0009

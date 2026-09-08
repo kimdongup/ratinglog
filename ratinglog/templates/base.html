@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <meta name="color-scheme" content="light">
+  <title>{% block title %}위험률 원장{% endblock %} · RatingLog</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">본문으로 이동</a>
+{% if current_user.is_authenticated %}
+<aside class="sidebar">
+  <a class="brand" href="{{ url_for('web.dashboard') }}"><span class="brand-icon">R</span> RatingLog <small>위험률 관리</small></a>
+  <div class="nav-label">WORKSPACE</div>
+  <nav aria-label="주 메뉴">
+    <a class="{{ 'active' if request.endpoint == 'web.dashboard' }}" href="{{ url_for('web.dashboard') }}"><span>◫</span> 대시보드</a>
+    <a class="{{ 'active' if request.endpoint in ['web.rates','web.detail','web.edit','web.comparison'] }}" href="{{ url_for('web.rates') }}"><span>▤</span> 위험률 원장</a>
+    {% if current_user.role in ['admin','editor'] %}<a href="{{ url_for('web.create') }}"><span>＋</span> 새 원장 등록</a>{% endif %}
+    {% if current_user.role in ['admin','reviewer'] %}<a href="{{ url_for('web.rates', state='submitted') }}"><span>✓</span> 검토 대기</a>{% endif %}
+    {% if current_user.role == 'admin' %}
+    <div class="nav-label">MANAGEMENT</div>
+    <a href="{{ url_for('web.rates', archived=1) }}"><span>▢</span> 보관함</a>
+    <a href="{{ url_for('auth.users') }}"><span>♙</span> 사용자 관리</a>
+    <a href="{{ url_for('web.audit_log') }}"><span>≡</span> 감사 기록</a>
+    {% endif %}
+  </nav>
+  <div class="sidebar-bottom"><span class="avatar">{{ current_user.name[:1] }}</span><div><a href="{{ url_for('auth.account') }}">{{ current_user.name }}</a><small>{{ role_labels[current_user.role] }}</small></div>
+    <form method="post" action="{{ url_for('auth.logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="icon-button" title="로그아웃" aria-label="로그아웃">↗</button></form>
+  </div>
+</aside>
+{% endif %}
+<div class="workspace {{ 'guest' if not current_user.is_authenticated }}">
+{% if current_user.is_authenticated %}<header class="topbar"><span>위험률 관리 <span class="muted">/</span> {% block breadcrumb %}워크스페이스{% endblock %}</span><span class="workspace-badge"><i></i> 조직 워크스페이스</span></header>{% endif %}
+<main id="main">
+{% for category, message in get_flashed_messages(with_categories=true) %}<div class="notice {{ category }}" role="status">{{ message }}</div>{% endfor %}
+{% block content %}{% endblock %}
+</main>
+<footer>RatingLog <span>·</span> 근거를 남기고, 변화를 관리합니다.</footer>
+</div>
+</body></html>
